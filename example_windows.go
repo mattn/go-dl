@@ -13,11 +13,11 @@ func clen(n []byte) int {
 }
 
 func main() {
-  handle, _ := dl.Open("libc.so")
+  handle, _ := dl.Open("kernel32.dll")
   proc, _ := dl.Sym(handle, "getenv")
   ret := dl.Call(
     proc,
-    uintptr(unsafe.Pointer(&([]byte)("HOME")[0])),
+    uintptr(unsafe.Pointer(&([]byte)("USERPROFILE")[0])),
     0,
     0)
   bytes := ((*[255]byte)(unsafe.Pointer(ret)))
