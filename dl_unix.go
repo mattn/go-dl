@@ -3,8 +3,6 @@ package dl
 /*
 #include <dlfcn.h>
 #include <stdlib.h>
-#include <stdio.h>
-#include <memory.h>
 
 unsigned long dlcall(unsigned long p, unsigned long a1, unsigned long a2, unsigned long a3) {
   typedef unsigned long (*type_call)(unsigned long, unsigned long, unsigned long);
@@ -16,16 +14,18 @@ import "C"
 import "os"
 import "unsafe"
 
+/*
 const (
   RTLD_LAZY = C.RTLD_LAZY
   RTLD_NOW = C.RTLD_NOW
   RTLD_GLOBAL = C.RTLD_GLOBAL
 )
+*/
 
-func Open(filename string, flag int) (uintptr, os.Error) {
+func Open(filename string /*, flag int*/) (uintptr, os.Error) {
   ptr := C.CString(filename)
   defer C.free(unsafe.Pointer(ptr))
-  ret := C.dlopen(ptr, C.int(flag))
+  ret := C.dlopen(ptr, /*C.int(flag)*/C.RTLD_LAZY)
   if ret != nil {
     return uintptr(ret), nil
   }
