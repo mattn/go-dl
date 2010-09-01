@@ -13,7 +13,7 @@ func clen(n []byte) int {
 }
 
 func main() {
-  handle, _ := dl.Open("libc.so", dl.RTLD_LAZY)
+  handle, _ := dl.Open("libc.so")
   proc, _ := dl.Sym(handle, "getenv")
   ret := dl.Call(
     proc,
