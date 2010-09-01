@@ -13,7 +13,7 @@ func clen(n []byte) int {
 }
 
 func main() {
-  handle, _ := dl.Open("kernel32.dll")
+  handle, _ := dl.Open("msvcrt.dll")
   proc, _ := dl.Sym(handle, "getenv")
   ret := dl.Call(
     proc,
