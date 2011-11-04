@@ -1,30 +1,35 @@
 package dl
 
-import "os"
+import "C"
+import "errors"
 import "syscall"
 
-func Open(filename string) (uintptr, os.Error) {
-  ret, err := syscall.LoadLibrary(filename)
-  if err == 0 {
-    return uintptr(ret), nil
-  }
-  return uintptr(ret), os.NewError(syscall.Errstr(err))
+func Open(filename string) (uintptr, error) {
+	ret, err := syscall.LoadLibrary(filename)
+	if err == 0 {
+		return uintptr(ret), nil
+	}
+	return uintptr(ret), errors.New(syscall.Errstr(err))
 }
 
-func Sym(handle uintptr, symbol string) (uintptr, os.Error) {
-  ret, err := syscall.GetProcAddress(uint32(handle), symbol)
-  if err == 0 {
-    return uintptr(ret), nil
-  }
-  return uintptr(ret), os.NewError(syscall.Errstr(err))
+func Sym(handle uintptr, symbol string) (uintptr, error) {
+	ret, err := syscall.GetProcAddress(syscall.Handle(handle), symbol)
+	if err == 0 {
+		return uintptr(ret), nil
+	}
+	return uintptr(ret), errors.New(syscall.Errstr(err))
 }
 
-func Close(handle uintptr) os.Error {
-  syscall.FreeLibrary(uint32(handle))
-  return nil
+func Close(handle uintptr) error {
+	syscall.FreeLibrary(syscall.Handle(handle))
+	return nil
 }
 
 func Call(p, a1, a2, a3 uintptr) uintptr {
-  ret, _, _ := syscall.Syscall(p, a1, a2, a3)
-  return ret;
+	ret, _, _ := syscall.Syscall(p,
+		uintptr(p),
+		uintptr(a1),
+		uintptr(a2),
+		uintptr(a3))
+	return uintptr(ret)
 }

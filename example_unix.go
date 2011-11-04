@@ -1,6 +1,6 @@
 package main
 
-import "dl"
+import "github.com/mattn/go-dl/dl"
 import "unsafe"
 
 func clen(n []byte) int {
@@ -18,8 +18,8 @@ func main() {
   ret := dl.Call(
     proc,
     uintptr(unsafe.Pointer(&([]byte)("HOME")[0])),
-    0,
-    0)
-  bytes := ((*[255]byte)(unsafe.Pointer(ret)))
+	0,
+	0)
+  bytes := (([]byte)(unsafe.Pointer(ret)))
   println(string(bytes[0:clen(bytes)]))
 }

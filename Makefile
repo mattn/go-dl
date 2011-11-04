@@ -1,8 +1,8 @@
 include $(GOROOT)/src/Make.inc
 
-TARG     = dl
+TARG     = github.com/mattn/go-dl/dl
 ifeq ($(GOOS),windows)
-GOFILES = dl_windows.go
+CGOFILES = dl_windows.go
 EXAMPLE= example_windows
 else
 CGOFILES = dl_unix.go
